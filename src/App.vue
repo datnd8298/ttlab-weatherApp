@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <MainInfo :mainInfo="mainInfo" />
-    <Forecast :today="todayInfo" :tomorrow="tomorrowInfo"/>
+    <Forecast :today="todayInfo" :tomorrow="tomorrowInfo" />
   </div>
 </template>
 
@@ -21,6 +21,12 @@ export default {
     return {
       weatherInfo: {},
 
+      dayWeather: {
+        time: "",
+        temp: Number,
+        weather: String
+      },
+
       mainInfo: {
         temp: Number,
         humidity: Number,
@@ -29,28 +35,10 @@ export default {
         city: String,
         country: "Viet Nam"
       },
-      
-      todayInfo: {
-        morning: Number,
-        afternoon: Number,
-        evening: Number,
-        night: Number,
-        morningWeather: String,
-        afternoonWeather: String,
-        eveningWeather: String,
-        nightWeather: String
-      },
 
-      tomorrowInfo: {
-        morning: Number,
-        afternoon: Number,
-        evening: Number,
-        night: Number,
-        morningWeather: String,
-        afternoonWeather: String,
-        eveningWeather: String,
-        nightWeather: String
-      }
+      todayInfo: [],
+
+      tomorrowInfo: []
     }
   },
 
@@ -60,25 +48,21 @@ export default {
         .then((response) => {
           this.weatherInfo = response.data
 
-          this.todayInfo.morning = Math.floor(this.weatherInfo.list[1].main.temp - 273.15)
-          this.todayInfo.afternoon = Math.floor(this.weatherInfo.list[3].main.temp - 273.15)
-          this.todayInfo.evening = Math.floor(this.weatherInfo.list[5].main.temp - 273.15)
-          this.todayInfo.night = Math.floor(this.weatherInfo.list[6].main.temp - 273.15)
-          this.todayInfo.morningWeather = this.weatherInfo.list[1].weather[0].description
-          this.todayInfo.afternoonWeather = this.weatherInfo.list[3].weather[0].description
-          this.todayInfo.eveningWeather = this.weatherInfo.list[5].weather[0].description
-          this.todayInfo.nightWeather = this.weatherInfo.list[6].weather[0].description
+          for (let i = 1; i < 7; i++) {
+            this.dayWeather.temp = Math.floor(this.weatherInfo.list[i].main.temp - 273.15)
+            this.dayWeather.weather = this.weatherInfo.list[i].weather[0].description
+            this.todayInfo.push(this.dayWeather)
+          }
 
-          this.tomorrowInfo.morning = Math.floor(this.weatherInfo.list[9].main.temp - 273.15)
-          this.tomorrowInfo.afternoon = Math.floor(this.weatherInfo.list[11].main.temp - 273.15)
-          this.tomorrowInfo.evening = Math.floor(this.weatherInfo.list[13].main.temp - 273.15)
-          this.tomorrowInfo.night = Math.floor(this.weatherInfo.list[14].main.temp - 273.15)
-          this.tomorrowInfo.morningWeather = this.weatherInfo.list[9].weather[0].description
-          this.tomorrowInfo.afternoonWeather = this.weatherInfo.list[11].weather[0].description
-          this.tomorrowInfo.eveningWeather = this.weatherInfo.list[13].weather[0].description
-          this.tomorrowInfo.nightWeather = this.weatherInfo.list[14].weather[0].description
-          
-          this.mainInfo.temp = Math.floor((this.todayInfo.morning + this.todayInfo.afternoon + this.todayInfo.evening + this.todayInfo.night)/4)
+          for (let i = 9; i < 15; i++) {
+            this.dayWeather.temp = Math.floor(this.weatherInfo.list[i].main.temp - 273.15)
+            this.dayWeather.weather = this.weatherInfo.list[i].weather[0].description
+            this.tomorrowInfo.push(this.dayWeather)
+          }
+          var sum = 0;
+          this.mainInfo.temp = Math.floor(this.todayInfo.forEach((a) => {
+            return sum+=a
+          }) / this.todayInfo.length)
           this.mainInfo.humidity = this.weatherInfo.list[0].main.humidity
           this.mainInfo.wind = this.weatherInfo.list[0].wind.speed
           this.mainInfo.weather = this.weatherInfo.list[0].weather[0].description
