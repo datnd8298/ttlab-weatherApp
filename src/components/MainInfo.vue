@@ -10,7 +10,7 @@
         </h1>
       </div>
       <div id="iconWeather">
-        <img src="../assets/cloudy.png" alt="" />
+        <img :src="getIcon" alt="" />
       </div>
       <div id="moreInfo">
         <div id="location">
@@ -40,35 +40,47 @@
 export default {
   computed: {
     getTemp() {
-      return this.mainInfo.temp ? this.mainInfo.temp : "no info"
+      return this.mainInfo.temp ? this.mainInfo.temp : "no info";
     },
 
     getHumidity() {
-      return this.mainInfo.humidity ? this.mainInfo.humidity : "no info"
+      return this.mainInfo.humidity ? this.mainInfo.humidity : "no info";
     },
 
     getWind() {
-      return this.mainInfo.wind ? this.mainInfo.wind : "no info"
+      return this.mainInfo.wind ? this.mainInfo.wind : "no info";
     },
 
     getWeather() {
-      return this.mainInfo.weather ? this.mainInfo.weather : "no info"
+      return this.mainInfo.weather ? this.mainInfo.weather : "no info";
     },
 
     getCity() {
-      return this.mainInfo.city ? this.mainInfo.city : "no info"
+      return this.mainInfo.city ? this.mainInfo.city : "no info";
     },
 
     getCountry() {
-      return this.mainInfo.country ? this.mainInfo.country : "no info"
+      return this.mainInfo.country ? this.mainInfo.country : "no info";
+    },
+
+    getIcon() {
+      if (this.mainInfo.weather.includes("rain") == true) {
+        return "../assets/rain.png"
+      } else if (this.mainInfo.weather.includes("cloud") == true) {
+        return "../assets/cloudy.png"
+      } else if (this.mainInfo.weather.includes("sunny") == true) {
+        return "../assets/sunny.png"
+      } else if (this.mainInfo.weather.includes("clear") == true) {
+        return "../assets/clear.png"
+      }
+      return "../assets/nice.png"
     }
   },
 
   props: {
-    mainInfo: {}
+    mainInfo: {},
   },
-
-}
+};
 </script>
 
 <style scoped>
