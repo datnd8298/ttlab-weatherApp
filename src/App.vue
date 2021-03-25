@@ -24,7 +24,7 @@ export default {
       dayWeather: {
         time: "",
         temp: Number,
-        weather: String
+        weather: String,
       },
 
       mainInfo: {
@@ -33,53 +33,73 @@ export default {
         wind: Number,
         weather: String,
         city: String,
-        country: "Viet Nam"
+        country: "Viet Nam",
       },
 
       todayInfo: [],
 
-      tomorrowInfo: []
-    }
+      tomorrowInfo: [],
+
+      forecastToday: [],
+
+      forecastTomorrow: []
+    };
   },
 
   methods: {
     async getWeatherInfo() {
-      await axios("http://api.openweathermap.org/data/2.5/forecast?q=Hanoi,vn&mode=json&appid=c884e79cb699c1a98e4e8d01547ba93e")
+      await axios(
+        "http://api.openweathermap.org/data/2.5/forecast?q=Hanoi,vn&mode=json&appid=c884e79cb699c1a98e4e8d01547ba93e"
+      )
         .then((response) => {
-          this.weatherInfo = response.data
+          this.weatherInfo = response.data;
 
-          for (let i = 1; i < 7; i++) {
-            this.dayWeather.temp = Math.floor(this.weatherInfo.list[i].main.temp - 273.15)
-            this.dayWeather.weather = this.weatherInfo.list[i].weather[0].description
-            this.todayInfo.push(this.dayWeather)
+          this.forecastToday.push(this.weatherInfo.list[1])
+          this.forecastToday.push(this.weatherInfo.list[3])
+          this.forecastToday.push(this.weatherInfo.list[5])
+          this.forecastToday.push(this.weatherInfo.list[6])
+
+          this.forecastTomorrow.push(this.weatherInfo.list[9])
+          this.forecastTomorrow.push(this.weatherInfo.list[11])
+          this.forecastTomorrow.push(this.weatherInfo.list[13])
+          this.forecastTomorrow.push(this.weatherInfo.list[14])
+
+          for (let i = 0; i < 4; i++) {
+            this.dayWeather.temp = Math.floor(
+              this.forecastToday[i].main.temp - 273.15
+            );
+            this.dayWeather.weather = this.forecastToday[i].weather[0].description;
+            this.dayWeather.time = this.forecastToday[i].dt_txt;
+            this.todayInfo.push(this.dayWeather);
           }
 
-          for (let i = 9; i < 15; i++) {
-            this.dayWeather.temp = Math.floor(this.weatherInfo.list[i].main.temp - 273.15)
-            this.dayWeather.weather = this.weatherInfo.list[i].weather[0].description
-            this.tomorrowInfo.push(this.dayWeather)
+          for (let j = 0; j < 4; j++) {
+            this.dayWeather.temp = Math.floor(
+              this.forecastTomorrow[j].main.temp - 273.15
+            );
+            this.dayWeather.weather = this.forecastTomorrow[j].weather[0].description;
+            this.dayWeather.time = this.forecastToday[j].dt_txt;
+            this.tomorrowInfo.push(this.dayWeather);
           }
           var sum = 0;
-          this.mainInfo.temp = Math.floor(this.todayInfo.forEach((a) => {
-            return sum+=a
-          }) / this.todayInfo.length)
-          this.mainInfo.humidity = this.weatherInfo.list[0].main.humidity
-          this.mainInfo.wind = this.weatherInfo.list[0].wind.speed
-          this.mainInfo.weather = this.weatherInfo.list[0].weather[0].description
-          this.mainInfo.city = this.weatherInfo.city.name
+          this.todayInfo.forEach((element) => {
+            sum = sum + element.temp;
+          });
+          this.mainInfo.temp = Math.floor(sum / this.todayInfo.length);
+          this.mainInfo.humidity = this.weatherInfo.list[0].main.humidity;
+          this.mainInfo.wind = this.weatherInfo.list[0].wind.speed;
+          this.mainInfo.weather = this.weatherInfo.list[0].weather[0].description;
+          this.mainInfo.city = this.weatherInfo.city.name;
         })
         .catch((error) => {
           console.log(error.response);
-        })
-    }
+        });
+    },
   },
 
   created() {
-    this.getWeatherInfo()
-    console.log(this.mainInfo);
-    console.log(this.todayInfo);
-    console.log(this.tomorrowInfo);
-  }
+    this.getWeatherInfo();
+  },
 };
 </script>
 
