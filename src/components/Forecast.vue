@@ -7,8 +7,8 @@
     </div>
     <div id="info">
       <div v-for="(day, index) of today" :key="index">
-        <div><img :src="getIcon(day.time)" alt=""></div>
-        <div>{{getTime(day.time)}} &#176;</div>
+        <div><img :src="require(getIcon(day.time))" alt="" /></div>
+        <div>{{ getTime(day.time) }} &#176;</div>
         <div></div>
       </div>
     </div>
@@ -18,49 +18,49 @@
 <script>
 export default {
   props: {
-    today: [Object],
-    tomorrow: [Object],
+    today: Array,
+    tomorrow: Array,
   },
 
   computed: {
     getIcon(day) {
-      let hour = day.split(" ")[1]
-      let hourInt = parseInt(hour.split(":")[0])
-      if(day.weather.includes("rain") == true){
-        if(hourInt < 18){
-          return "../assets/rain.png"
-        } else{
-          return "../assets/rainnight.png"
+      let hour = day.split(" ")[1];
+      let hourInt = parseInt(hour.split(":")[0]);
+      if (day.weather.includes("rain") == true) {
+        if (hourInt < 18) {
+          return "../assets/rain.png";
+        } else {
+          return "../assets/rainnight.png";
         }
-      } else if(day.weather.includes("cloud") == true){
-        if(hourInt < 18){
-          return "../assets/cloudy.png"
-        } else{
-          return "../assets/cloudynight.png"
+      } else if (day.weather.includes("cloud") == true) {
+        if (hourInt < 18) {
+          return "../assets/cloudy.png";
+        } else {
+          return "../assets/cloudynight.png";
         }
       } else {
-        if(hourInt < 18){
-          return "../assets/clear.png"
-        } else{
-          return "../assets/clearnight.png"
+        if (hourInt < 18) {
+          return "../assets/clear.png";
+        } else {
+          return "../assets/clearnight.png";
         }
       }
     },
 
-    getTime(time){
-      let hour = time.split(" ")[1]
-      let hourInt = parseInt(hour.split(":")[0])
-      if(hourInt > 18) {
-        return "Night"
-      } else if (hourInt > 12){
-        return "Evening"
+    getTime(time) {
+      let hour = time.split(" ")[1];
+      let hourInt = parseInt(hour.split(":")[0]);
+      if (hourInt > 18) {
+        return "Night";
+      } else if (hourInt > 12) {
+        return "Evening";
       } else if (hourInt > 9) {
-        return "Afternoon"
+        return "Afternoon";
       } else {
-        return "Morning"
+        return "Morning";
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -10,7 +10,7 @@
         </h1>
       </div>
       <div id="iconWeather">
-        <img :src="getIcon" alt="" />
+        <img :src="require(getIcon)" alt="" />
       </div>
       <div id="moreInfo">
         <div id="location">
@@ -65,16 +65,16 @@ export default {
 
     getIcon() {
       if (this.mainInfo.weather.includes("rain") == true) {
-        return "../assets/rain.png"
+        return "../assets/rain.png";
       } else if (this.mainInfo.weather.includes("cloud") == true) {
-        return "../assets/cloudy.png"
+        return "../assets/cloudy.png";
       } else if (this.mainInfo.weather.includes("sunny") == true) {
-        return "../assets/sunny.png"
+        return "../assets/sunny.png";
       } else if (this.mainInfo.weather.includes("clear") == true) {
-        return "../assets/clear.png"
+        return "../assets/clear.png";
       }
-      return "../assets/nice.png"
-    }
+      return "../assets/nice.png";
+    },
   },
 
   props: {
