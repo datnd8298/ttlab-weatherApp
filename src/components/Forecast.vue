@@ -3,8 +3,20 @@
     <div class="info-block">
       <div class="tab">
         <div class="tab-content">
-          <div class="content-button" @click="todayForecast">Today</div>
-          <div class="content-button" @click="tomorrowForecast">Tomorrow</div>
+          <div
+            class="content-button"
+            @click="todayForecast"
+            :active="todayActive"
+          >
+            Today
+          </div>
+          <div
+            class="content-button"
+            @click="tomorrowForecast"
+            :active="tomorrowActive"
+          >
+            Tomorrow
+          </div>
         </div>
         <div class="detail-info">
           <a href="#"><button>See All</button></a>
@@ -49,6 +61,8 @@ export default {
     return {
       timeOfDay: ["Morning", "Afternoon", "Evening", "Night"],
       forecastInfo: {},
+      todayActive: "0",
+      tomorrowActive: "0",
     };
   },
   props: {
@@ -89,11 +103,15 @@ export default {
 
     todayForecast() {
       this.forecastInfo = this.todayInfo;
+      this.todayActive = "1";
+      this.tomorrowActive = "0";
       // console.log(this.todayInfo);
     },
 
     tomorrowForecast() {
       this.forecastInfo = this.tomorrowInfo;
+      this.todayActive = "0";
+      this.tomorrowActive = "1";
     },
   },
 
@@ -110,7 +128,7 @@ export default {
 }
 
 .info-block {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .tab {
@@ -137,10 +155,8 @@ export default {
 }
 
 /* Create an active/current tablink class */
-.content-button.active {
-  background-color: #ccc;
+.content-button[active="1"] {
   font-weight: bold;
-  font-size: 15px;
 }
 
 .detail-info {

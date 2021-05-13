@@ -116,6 +116,7 @@ export default {
 }
 
 #moreInfo {
+  margin-bottom: 30px;
   text-align: left;
 }
 
