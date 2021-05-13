@@ -1,15 +1,15 @@
 <template>
-  <div id="container">
+  <div class="foreCast">
     <div class="tab">
-      <button class="tablinks">Today</button>
-      <button class="tablinks">Tomorrow</button>
+      <button>Today</button>
+      <button>Tomorrow</button>
       <span><a href="#">See All</a></span>
     </div>
     <div id="info">
-      <div v-for="(day, index) of today" :key="index">
-        <div><img :src="require(getIcon(day.time))" alt="" /></div>
-        <div>{{ getTime(day.time) }} &#176;</div>
-        <div></div>
+      <div v-for="day of todayInfo" :key="day.index">
+        <img :src="getIcon(day.time)" alt="" />
+        <div>&#176;</div>
+        <div>{{ getTime(day.time) }}</div>
       </div>
     </div>
   </div>
@@ -18,37 +18,39 @@
 <script>
 export default {
   props: {
-    today: Array,
-    tomorrow: Array,
+    todayInfo: Array,
+    tomorrowInfo: Array,
   },
 
   computed: {
     getIcon(day) {
-      let hour = day.split(" ")[1];
+      let nameFile;
+      let hour = day.toString().split(" ")[1];
       let hourInt = parseInt(hour.split(":")[0]);
-      if (day.weather.includes("rain") == true) {
+      if (day.weather.toString().includes("rain") == true) {
         if (hourInt < 18) {
-          return "../assets/rain.png";
+          nameFile = "rain";
         } else {
-          return "../assets/rainnight.png";
+          nameFile = "rainnight";
         }
-      } else if (day.weather.includes("cloud") == true) {
+      } else if (day.weather.toString().includes("cloud") == true) {
         if (hourInt < 18) {
-          return "../assets/cloudy.png";
+          nameFile = "cloudy";
         } else {
-          return "../assets/cloudynight.png";
+          nameFile = "cloudynight";
         }
       } else {
         if (hourInt < 18) {
-          return "../assets/clear.png";
+          nameFile = "clear";
         } else {
-          return "../assets/clearnight.png";
+          nameFile = "clearnight";
         }
       }
+      return require(`../assets/${nameFile}.png`);
     },
 
     getTime(time) {
-      let hour = time.split(" ")[1];
+      let hour = time.toString().split(" ")[1];
       let hourInt = parseInt(hour.split(":")[0]);
       if (hourInt > 18) {
         return "Night";
@@ -61,13 +63,24 @@ export default {
       }
     },
   },
+
+  methods: {
+    async logWeather() {
+      console.log(this.todayInfo);
+      console.log(this.tomorrowInfo);
+    },
+  },
+
+  created() {
+    this.logWeather();
+  },
 };
 </script>
 
 <style scoped>
-#container {
-  padding-left: 200px;
-  padding-right: 380px;
+.foreCast {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .tab {
@@ -105,8 +118,9 @@ export default {
   font-size: 15px;
 }
 
-#info div {
-  display: inline-block;
-  width: 25%;
+#info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 </style>

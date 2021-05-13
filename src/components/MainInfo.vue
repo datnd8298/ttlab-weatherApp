@@ -1,35 +1,38 @@
 <template>
-  <div>
+  <div class="mainInfo">
     <div id="mainTemp">
       <div id="temp">
         <h1>
           {{ getTemp }} &#8451;
-          <span style="font-size: 15px; font-weight: lighter"
-            >| {{ getWeather }}</span
-          >
+          <span style="font-size: 13px; font-weight: lighter">
+            |{{ getWeather }}
+          </span>
         </h1>
       </div>
       <div id="iconWeather">
-        <img :src="require(getIcon)" alt="" />
+        <img :src="getIcon" alt="" />
       </div>
-      <div id="moreInfo">
-        <div id="location">
-          <p style="font-weight: bold; font-size: 25px">{{ getCity }}</p>
-          <p style="font-size: 15px">{{ getCountry }}</p>
+    </div>
+    <div id="moreInfo">
+      <div id="location">
+        <p style="font-weight: bold; font-size: 25px">{{ getCity }}</p>
+        <p style="font-size: 15px">
+          {{ getCountry }}
+          <span><img src="../assets/selectionArrow.png" alt="" /></span>
+        </p>
+      </div>
+      <div id="weatherInfo">
+        <div>
+          <span>{{ getHumidity }} %</span>
+          <p>Humidity</p>
         </div>
-        <div id="weatherInfo">
-          <div>
-            <span style="text-align: center">{{ getHumidity }} %</span>
-            <p>Humidity</p>
-          </div>
-          <div>
-            <span style="text-align: center">{{ getWind }} KM/H</span>
-            <p>Wind</p>
-          </div>
-          <div>
-            <span style="text-align: center">10</span>
-            <p>UV Index</p>
-          </div>
+        <div>
+          <span>10</span>
+          <p>UV Index</p>
+        </div>
+        <div>
+          <span>{{ getWind }} KM/H</span>
+          <p>Wind</p>
         </div>
       </div>
     </div>
@@ -64,16 +67,17 @@ export default {
     },
 
     getIcon() {
-      if (this.mainInfo.weather.includes("rain") == true) {
-        return "../assets/rain.png";
-      } else if (this.mainInfo.weather.includes("cloud") == true) {
-        return "../assets/cloudy.png";
-      } else if (this.mainInfo.weather.includes("sunny") == true) {
-        return "../assets/sunny.png";
-      } else if (this.mainInfo.weather.includes("clear") == true) {
-        return "../assets/clear.png";
+      var nameFile = "nice";
+      if (this.mainInfo.weather.toString().includes("rain") == true) {
+        nameFile = "rain";
+      } else if (this.mainInfo.weather.toString().includes("cloud") == true) {
+        nameFile = "cloud";
+      } else if (this.mainInfo.weather.toString().includes("sunny") == true) {
+        nameFile = "sunny";
+      } else if (this.mainInfo.weather.toString().includes("clear") == true) {
+        nameFile = "clear";
       }
-      return "../assets/nice.png";
+      return require(`../assets/${nameFile}.png`);
     },
   },
 
@@ -84,38 +88,48 @@ export default {
 </script>
 
 <style scoped>
+.mainInfo {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#mainTemp {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 #temp {
-  width: 50%;
-  display: inline-block;
+  width: 60%;
   font-size: 25px;
 }
 
 #iconWeather {
   max-height: 200px;
-  width: 50%;
-  display: inline-block;
 }
 
 #iconWeather img {
   height: 100px;
-  width: 150px;
+  width: 100px;
 }
 
 #moreInfo {
   text-align: left;
-  padding-left: 200px;
 }
 
 #location {
-  padding-bottom: 50px;
+  margin-bottom: 30px;
 }
 
 #weatherInfo div {
   display: inline-block;
-  width: 30%;
+  text-align: center;
+  width: 33%;
 }
 
-#weatherInfo div span {
+#weatherInfo span {
   font-weight: bold;
+  text-align: center;
 }
 </style>

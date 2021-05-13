@@ -1,13 +1,15 @@
 <template>
   <div id="app">
+    <InfoBar />
     <MainInfo :mainInfo="mainInfo" />
-    <Forecast :today="todayInfo" :tomorrow="tomorrowInfo" />
+    <Forecast :todayInfo="todayInfo" :tomorrowInfo="tomorrowInfo" />
   </div>
 </template>
 
 <script>
 import MainInfo from "./components/MainInfo.vue";
 import Forecast from "./components/Forecast.vue";
+import InfoBar from "./components/InfoBar.vue";
 import axios from "axios";
 
 export default {
@@ -15,6 +17,7 @@ export default {
   components: {
     MainInfo,
     Forecast,
+    InfoBar,
   },
 
   data() {
@@ -113,7 +116,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
+  width: 33%;
 }
 </style>
