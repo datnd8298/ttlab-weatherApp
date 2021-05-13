@@ -39,6 +39,7 @@ export default {
 <style scoped>
 #clock span {
   font-weight: bold;
+  padding-left: 5px;
 }
 
 #mobileInfo {
@@ -52,11 +53,8 @@ export default {
   margin-right: 5px;
 }
 
-#clock span {
-  margin-left: 20px;
-}
-
 #register {
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;

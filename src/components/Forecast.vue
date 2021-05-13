@@ -1,15 +1,43 @@
 <template>
-  <div class="foreCast">
-    <div class="tab">
-      <button>Today</button>
-      <button>Tomorrow</button>
-      <span><a href="#">See All</a></span>
+  <div class="fore-cast">
+    <div class="info-block">
+      <div class="tab">
+        <div class="tab-content">
+          <div class="content-button" @click="todayForecast">Today</div>
+          <div class="content-button" @click="tomorrowForecast">Tomorrow</div>
+        </div>
+        <div class="detail-info">
+          <a href="#"><button>See All</button></a>
+        </div>
+      </div>
+      <div class="info">
+        <div v-for="(day, index) of forecastInfo" :key="index">
+          <img :src="require(`../assets/${getIcon(day, index)}.png`)" alt="" />
+          <div>{{ getTemp(day) }}&#176;</div>
+          <div>{{ timeOfDay[index] }}</div>
+        </div>
+      </div>
     </div>
-    <div id="info">
-      <div v-for="day of todayInfo" :key="day.index">
-        <img :src="getIcon(day.time)" alt="" />
-        <div>&#176;</div>
-        <div>{{ getTime(day.time) }}</div>
+    <div class="info-block">
+      <div class="tab">
+        <div class="tab-content">
+          <span>Air Polutions</span>
+        </div>
+        <div class="detail-info">
+          <a href="#"><button>Details</button></a>
+        </div>
+      </div>
+      <div id="air-polution-info">
+        <div id="air-polution-img">
+          <img src="../assets/unhealthy-icon.png" alt="" />
+        </div>
+        <div>
+          <span
+            >162 <span style="font-size: 13px">| Micro Dust / PM2.5</span></span
+          >
+          <br />
+          <span style="font-size: 13px">Unhealthy</span>
+        </div>
       </div>
     </div>
   </div>
@@ -17,110 +45,151 @@
 
 <script>
 export default {
+  data() {
+    return {
+      timeOfDay: ["Morning", "Afternoon", "Evening", "Night"],
+      forecastInfo: {},
+    };
+  },
   props: {
     todayInfo: Array,
     tomorrowInfo: Array,
   },
 
-  computed: {
-    getIcon(day) {
+  methods: {
+    getTemp(day) {
+      return Math.floor(day.main.temp - 273.15);
+    },
+
+    getIcon(day, index) {
       let nameFile;
-      let hour = day.toString().split(" ")[1];
-      let hourInt = parseInt(hour.split(":")[0]);
-      if (day.weather.toString().includes("rain") == true) {
-        if (hourInt < 18) {
+      if (index < 2) {
+        if (day.weather[0].description.includes("rain") == true) {
           nameFile = "rain";
-        } else {
-          nameFile = "rainnight";
-        }
-      } else if (day.weather.toString().includes("cloud") == true) {
-        if (hourInt < 18) {
+        } else if (day.weather[0].description.includes("cloud") == true) {
           nameFile = "cloudy";
-        } else {
-          nameFile = "cloudynight";
-        }
-      } else {
-        if (hourInt < 18) {
+        } else if (day.weather[0].description.includes("cloud") == true) {
           nameFile = "clear";
         } else {
-          nameFile = "clearnight";
+          nameFile = "nice";
+        }
+      } else {
+        if (day.weather[0].description.includes("rain") == true) {
+          nameFile = "rain";
+        } else if (day.weather[0].description.includes("cloud") == true) {
+          nameFile = "cloudy";
+        } else if (day.weather[0].description.includes("cloud") == true) {
+          nameFile = "clear";
+        } else {
+          nameFile = "nice";
         }
       }
-      return require(`../assets/${nameFile}.png`);
+      return nameFile;
     },
 
-    getTime(time) {
-      let hour = time.toString().split(" ")[1];
-      let hourInt = parseInt(hour.split(":")[0]);
-      if (hourInt > 18) {
-        return "Night";
-      } else if (hourInt > 12) {
-        return "Evening";
-      } else if (hourInt > 9) {
-        return "Afternoon";
-      } else {
-        return "Morning";
-      }
+    todayForecast() {
+      this.forecastInfo = this.todayInfo;
+      // console.log(this.todayInfo);
     },
-  },
 
-  methods: {
-    async logWeather() {
-      console.log(this.todayInfo);
-      console.log(this.tomorrowInfo);
+    tomorrowForecast() {
+      this.forecastInfo = this.tomorrowInfo;
     },
   },
 
   created() {
-    this.logWeather();
+    this.todayForecast();
   },
 };
 </script>
 
 <style scoped>
-.foreCast {
+.fore-cast {
   padding-left: 5px;
   padding-right: 5px;
 }
 
+.info-block {
+  margin-top: 10px;
+}
+
 .tab {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   overflow: hidden;
-  /* border: 1px solid #ccc; */
-  background-color: #f1f1f1;
   margin-bottom: 20px;
 }
 
 /* Style the buttons that are used to open the tab content */
-.tab button {
-  background-color: #f1f1f1;
-  float: left;
+.content-button {
+  background-color: white;
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 14px 16px;
+  margin-right: 20px;
   transition: 0.3s;
 }
 
-.tab span {
-  float: right;
-  color: blue;
-}
-
 /* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ddd;
+.content-button:hover {
+  font-weight: bold;
 }
 
 /* Create an active/current tablink class */
-.tab button.active {
+.content-button.active {
   background-color: #ccc;
   font-weight: bold;
   font-size: 15px;
 }
 
-#info {
+.detail-info {
+  display: flex;
+  align-items: center;
+}
+
+.detail-info button {
+  background-color: white;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  color: blue;
+}
+
+.info {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
+}
+
+.tab-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.tab-content span {
+  font-weight: bold;
+}
+
+#air-polution-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+#air-polution-img {
+  display: flex;
+  align-content: center;
+  width: 90px;
+}
+
+#air-polution-img img {
+  max-height: 80px;
+  max-width: 90px;
 }
 </style>

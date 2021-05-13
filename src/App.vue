@@ -2,7 +2,7 @@
   <div id="app">
     <InfoBar />
     <MainInfo :mainInfo="mainInfo" />
-    <Forecast :todayInfo="todayInfo" :tomorrowInfo="tomorrowInfo" />
+    <Forecast :todayInfo="forecastToday" :tomorrowInfo="forecastTomorrow" />
   </div>
 </template>
 
@@ -23,12 +23,6 @@ export default {
   data() {
     return {
       weatherInfo: {},
-
-      dayWeather: {
-        time: "",
-        temp: Number,
-        weather: String,
-      },
 
       mainInfo: {
         temp: Number,
@@ -55,38 +49,38 @@ export default {
         "http://api.openweathermap.org/data/2.5/forecast?q=Hanoi,vn&mode=json&appid=c884e79cb699c1a98e4e8d01547ba93e"
       )
         .then((response) => {
+          let dayWeather = {
+            temp: Number,
+            weather: String,
+          };
           this.weatherInfo = response.data;
 
           this.forecastToday.push(this.weatherInfo.list[1]);
-          this.forecastToday.push(this.weatherInfo.list[3]);
+          this.forecastToday.push(this.weatherInfo.list[2]);
+          this.forecastToday.push(this.weatherInfo.list[4]);
           this.forecastToday.push(this.weatherInfo.list[5]);
-          this.forecastToday.push(this.weatherInfo.list[6]);
 
-          this.forecastTomorrow.push(this.weatherInfo.list[9]);
+          this.forecastTomorrow.push(this.weatherInfo.list[7]);
+          this.forecastTomorrow.push(this.weatherInfo.list[8]);
+          this.forecastTomorrow.push(this.weatherInfo.list[10]);
           this.forecastTomorrow.push(this.weatherInfo.list[11]);
-          this.forecastTomorrow.push(this.weatherInfo.list[13]);
-          this.forecastTomorrow.push(this.weatherInfo.list[14]);
 
           for (let i = 0; i < 4; i++) {
-            this.dayWeather.temp = Math.floor(
+            dayWeather.temp = Math.floor(
               this.forecastToday[i].main.temp - 273.15
             );
-            this.dayWeather.weather = this.forecastToday[
-              i
-            ].weather[0].description;
-            this.dayWeather.time = this.forecastToday[i].dt_txt;
-            this.todayInfo.push(this.dayWeather);
+            dayWeather.weather = this.forecastToday[i].weather[0].description;
+            this.todayInfo.push(dayWeather);
           }
 
           for (let j = 0; j < 4; j++) {
-            this.dayWeather.temp = Math.floor(
+            dayWeather.temp = Math.floor(
               this.forecastTomorrow[j].main.temp - 273.15
             );
-            this.dayWeather.weather = this.forecastTomorrow[
+            dayWeather.weather = this.forecastTomorrow[
               j
             ].weather[0].description;
-            this.dayWeather.time = this.forecastToday[j].dt_txt;
-            this.tomorrowInfo.push(this.dayWeather);
+            this.tomorrowInfo.push(dayWeather);
           }
           var sum = 0;
           this.todayInfo.forEach((element) => {

@@ -2,15 +2,15 @@
   <div class="mainInfo">
     <div id="mainTemp">
       <div id="temp">
-        <h1>
+        <span>
           {{ getTemp }} &#8451;
           <span style="font-size: 13px; font-weight: lighter">
-            |{{ getWeather }}
+            | {{ getWeather }}
           </span>
-        </h1>
+        </span>
       </div>
       <div id="iconWeather">
-        <img :src="getIcon" alt="" />
+        <img :src="require(`../assets/${getIcon}.png`)" alt="" />
       </div>
     </div>
     <div id="moreInfo">
@@ -71,13 +71,13 @@ export default {
       if (this.mainInfo.weather.toString().includes("rain") == true) {
         nameFile = "rain";
       } else if (this.mainInfo.weather.toString().includes("cloud") == true) {
-        nameFile = "cloud";
+        nameFile = "cloudy";
       } else if (this.mainInfo.weather.toString().includes("sunny") == true) {
         nameFile = "sunny";
       } else if (this.mainInfo.weather.toString().includes("clear") == true) {
         nameFile = "clear";
       }
-      return require(`../assets/${nameFile}.png`);
+      return nameFile;
     },
   },
 
@@ -102,7 +102,8 @@ export default {
 
 #temp {
   width: 60%;
-  font-size: 25px;
+  font-size: 65px;
+  font-weight: bold;
 }
 
 #iconWeather {
