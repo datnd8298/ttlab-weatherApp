@@ -19,7 +19,9 @@
           </div>
         </div>
         <div class="detail-info">
-          <a href="#"><button>See All</button></a>
+          <router-link to="/forecast" :dayTime="dayTime"
+            ><button>See All</button></router-link
+          >
         </div>
       </div>
       <div class="info">
@@ -63,6 +65,7 @@ export default {
       forecastInfo: {},
       todayActive: "0",
       tomorrowActive: "0",
+      dayTime: "Today",
     };
   },
   props: {
@@ -105,6 +108,7 @@ export default {
       this.forecastInfo = this.todayInfo;
       this.todayActive = "1";
       this.tomorrowActive = "0";
+      this.dayTime = "Today";
       // console.log(this.todayInfo);
     },
 
@@ -112,6 +116,7 @@ export default {
       this.forecastInfo = this.tomorrowInfo;
       this.todayActive = "0";
       this.tomorrowActive = "1";
+      this.dayTime = "Tomorrow";
     },
   },
 
@@ -178,6 +183,10 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.info div {
+  text-justify: center;
 }
 
 .tab-content {

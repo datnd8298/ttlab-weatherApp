@@ -101,7 +101,7 @@ export default {
 }
 
 #temp {
-  width: 60%;
+  width: 70%;
   font-size: 65px;
   font-weight: bold;
 }
